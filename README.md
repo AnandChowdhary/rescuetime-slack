@@ -23,6 +23,8 @@ apiKeys:
 
 More people can be added under the `apiKeys` key in the YAML file. For each user, `$API_KEY` is replaced by the API key for their name, stored in GitHub Secrets; for example "Anand Chowdhary" transforms to `API_KEY_ANAND_CHOWDHARY`. The `$WEBHOOK` environment variable has the Slack webhook.
 
+Fork this project and update the YAML configuration and GitHub Secrets to get your own bot. You can also customize the bot name and icon in the configuration file (`botName` and `botIcon` respectively).
+
 ## 👩‍💻 Automation
 
 A GitHub Actions [workflow](./.github/workflows/deno.yml) runs the following script every day at 8 am UTC to post the message:
