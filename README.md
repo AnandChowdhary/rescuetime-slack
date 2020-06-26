@@ -25,10 +25,10 @@ More people can be added under the `apiKeys` key in the YAML file. For each user
 
 ## 👩‍💻 Automation
 
-A GitHub Actions [workflow](./.github/workflows/deno.yml) runs the following script every alternate day to update this repo:
+A GitHub Actions [workflow](./.github/workflows/deno.yml) runs the following script every day at 8 am UTC to post the message:
 
 ```bash
-deno run --allow-net --allow-write --allow-read --allow-env --unstable mod.ts
+deno run --unstable --allow-net --allow-read --allow-env mod.ts
 ```
 
 ## 📄 License
