@@ -19,8 +19,8 @@ jobs:
         uses: denolib/setup-deno@master
         with:
           deno-version: 1.x
-      - name: Update backlog data
-        run: deno run --unstable --allow-net --allow-read mod.ts
+      - name: Post RescueTime statistics to Slack
+        run: deno run --unstable --allow-net --allow-read --allow-env mod.ts
         env:
           API_KEY_ANAND_CHOWDHARY: ${{ secrets.API_KEY_ANAND_CHOWDHARY }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
