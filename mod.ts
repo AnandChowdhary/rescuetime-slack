@@ -40,7 +40,7 @@ export const postToSlack = async (
   data: RescueTimeDailySummary
 ) => {
   const payload = {
-    text: `*RescueTime* summary for <@${user}> for ${data.date}`,
+    text: `*RescueTime* summary for ${user} for ${data.date}`,
     blocks: [
       {
         type: "section",
@@ -68,8 +68,19 @@ export const rescuetimeSlack = async () => {
     apiKeys: { [index: string]: string };
     webhook: string;
   } = load(file);
+  config.webhook = config.webhook.replace(
+    "$WEBHOOK",
+    Deno.env.get("WEBHOOK") ?? ""
+  );
   for await (const user of Object.keys(config.apiKeys)) {
-    const summaries = await fetchDailySummary(config.apiKeys[user]);
+    const summaries = await fetchDailySummary(
+      config.apiKeys[user].replace(
+        "$API_KEY",
+        Deno.env.get(
+          `API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`
+        ) ?? ""
+      )
+    );
     if (!summaries.length) continue;
     await postToSlack(config.webhook, user, summaries[0]);
     console.log(`Posted ${user}'s summary to Slack`);
