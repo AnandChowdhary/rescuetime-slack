@@ -1,6 +1,6 @@
 # ⏰ RescueTime Slack
 
-This is a starter template for building Deno packages in TypeScript, with GitHub Actions-powered CI, tests, CLI, and Semantic Release on GitHub and npm.
+Post your RescueTime daily productivity pulse and hours logged to Slack.
 
 [![Deno CI](https://github.com/AnandChowdhary/rescuetime-slack/workflows/RescueTime%20Slack/badge.svg)](https://github.com/AnandChowdhary/rescuetime-slack/actions)
 [![GitHub](https://img.shields.io/github/license/AnandChowdhary/rescuetime-slack)](https://github.com/AnandChowdhary/rescuetime-slack/blob/master/LICENSE)
