@@ -35,14 +35,15 @@ export const fetchDailySummary = async (
 
 /** Post a message to a Slack channel */
 export const postToSlack = async (
+  username: string,
+  icon_url: string,
   url: string,
   user: string,
   data: RescueTimeDailySummary
 ) => {
   const payload = {
-    username: "Koj Bot",
-    icon_url:
-      "https://raw.githubusercontent.com/AnandChowdhary/rescuetime-slack/master/assets/bot.png",
+    username,
+    icon_url,
     blocks: [
       {
         type: "section",
@@ -82,6 +83,8 @@ export const rescuetimeSlack = async () => {
   const config: {
     apiKeys: { [index: string]: string };
     webhook: string;
+    botName: string;
+    botIcon: string;
   } = load(file);
   config.webhook = config.webhook.replace(
     "$WEBHOOK",
@@ -97,7 +100,13 @@ export const rescuetimeSlack = async () => {
       )
     );
     if (!summaries.length) continue;
-    await postToSlack(config.webhook, user, summaries[0]);
+    await postToSlack(
+      config.botName,
+      config.botIcon,
+      config.webhook,
+      user,
+      summaries[0]
+    );
     console.log(`Posted ${user}'s summary to Slack`);
   }
   console.log("Success");
