@@ -1,6 +1,7 @@
 import { load } from "https://deno.land/x/js_yaml_port/js-yaml.js";
 import { join } from "https://deno.land/std@0.51.0/path/mod.ts";
 import { readFileStr } from "https://deno.land/std@0.51.0/fs/mod.ts";
+import ky from "https://unpkg.com/ky/index.js";
 
 export interface RescueTimeDailySummary {
   id: number;
@@ -27,21 +28,36 @@ export interface RescueTimeDailySummary {
 export const fetchDailySummary = async (
   apiKey: string
 ): Promise<RescueTimeDailySummary[]> => {
-  const response = await fetch(
-    `https://www.rescuetime.com/anapi/daily_summary_feed?key=${apiKey}`
-  );
-  if (!response.ok) throw new Error("Unable to fetch");
-  return response.json();
+  return ky
+    .get(`https://www.rescuetime.com/anapi/daily_summary_feed?key=${apiKey}`)
+    .json();
 };
 
 /** Post a message to a Slack channel */
 export const postToSlack = async (
+  url: string,
   user: string,
   data: RescueTimeDailySummary
 ) => {
-  console.log({
-    text: `${user}'s RescueTime summary for ${data.date}:`,
-  });
+  const payload = {
+    text: `*RescueTime* summary for <@${user}> for ${data.date}`,
+    blocks: [
+      {
+        type: "section",
+        fields: [
+          {
+            type: "mrkdwn",
+            text: `*${data.productivity_pulse}/100* \n Productivity Pulse`,
+          },
+          {
+            type: "mrkdwn",
+            text: `*${data.total_duration_formatted}* \n Total Duration`,
+          },
+        ],
+      },
+    ],
+  };
+  console.log(await ky.post(url, { json: payload }).text());
 };
 
 /** Run the RescueTime Slack script */
@@ -55,7 +71,7 @@ export const rescuetimeSlack = async () => {
   for await (const user of Object.keys(config.apiKeys)) {
     const summaries = await fetchDailySummary(config.apiKeys[user]);
     if (!summaries.length) continue;
-    await postToSlack(user, summaries[0]);
+    await postToSlack(config.webhook, user, summaries[0]);
     console.log(`Posted ${user}'s summary to Slack`);
   }
   console.log("Success");
