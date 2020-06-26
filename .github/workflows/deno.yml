@@ -1,45 +1,27 @@
-name: Deno CI
+name: RescueTime Slack
 on:
   push:
     branches:
       - master
+  schedule:
+    - cron: "6 6 * * *"
+  repository_dispatch:
+    types: [update]
 jobs:
-  build:
-    name: ${{ matrix.kind }} ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    strategy:
-      matrix:
-        os: [macOS-latest, ubuntu-latest, windows-latest]
-    env:
-      GH_ACTIONS: true
-      DENO_BUILD_MODE: release
-      V8_BINARY: true
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Deno
-        uses: denolib/setup-deno@master
-        with:
-          deno-version: 1.x
-      - name: Tests
-        run: deno test --allow-read
   release:
-    name: Release
+    name: Update
     runs-on: ubuntu-18.04
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - name: Setup Deno
+        uses: denolib/setup-deno@master
         with:
-          node-version: 12.17.0
-      - name: Setup package.json
-        run: echo '{"name":"rescuetime-slack","version":"0.0.0","publishConfig":{"access":"public"},"scripts":{"semantic-release":"semantic-release"},"repository":{"type":"git","url":"https://github.com/AnandChowdhary/rescuetime-slack.git"},"author":"Anand Chowdhary <mail@annadchowdhary.com>","license":"MIT","bugs":{"url":"https://github.com/AnandChowdhary/rescuetime-slack/issues"},"homepage":"https://anandchowdhary.github.io/rescuetime-slack/","devDependencies":{"semantic-release":"^17.0.4","semantic-release-gitmoji":"^1.3.3"}}' > package.json
-      - name: Install dependencies
-        run: npm install
-      - name: Release
-        run: npx semantic-release
+          deno-version: 1.x
+      - name: Update backlog data
+        run: deno run --unstable --allow-net --allow-read mod.ts
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          API_KEY_ANAND_CHOWDHARY: ${{ secrets.API_KEY_ANAND_CHOWDHARY }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          WEBHOOK: ${{ secrets.WEBHOOK }}
