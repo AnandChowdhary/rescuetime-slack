@@ -48,7 +48,13 @@ export const postToSlack = async (
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*RescueTime* summary for ${user} for ${data.date}`,
+          text: `*RescueTime* summary for *${user}* for ${new Date(
+            data.date
+          ).toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+          })}`,
         },
       },
       {
