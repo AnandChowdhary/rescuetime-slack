@@ -1,8 +1,5 @@
 name: RescueTime Slack
 on:
-  push:
-    branches:
-      - master
   schedule:
     - cron: "0 10 * * *"
   repository_dispatch:
