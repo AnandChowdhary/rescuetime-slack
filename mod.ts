@@ -43,8 +43,14 @@ export const postToSlack = async (
     username: "Koj Bot",
     icon_url:
       "https://raw.githubusercontent.com/AnandChowdhary/rescuetime-slack/master/assets/bot.png",
-    text: `*RescueTime* summary for ${user} for ${data.date}`,
     blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*RescueTime* summary for ${user} for ${data.date}`,
+        },
+      },
       {
         type: "section",
         fields: [
