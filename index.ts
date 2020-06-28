@@ -75,7 +75,7 @@ export const postToSlack = async (
       },
     ],
   };
-  await axios.post(url, { json: payload });
+  await axios.post(url, payload);
 };
 
 /** Run the RescueTime Slack script */
