@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Post your RescueTime daily productivity pulse and hours logged to Slack",
   "scripts": {
-    "run": "ts-node mod.ts"
+    "run": "ts-node index.ts"
   },
   "repository": {
     "type": "git",
