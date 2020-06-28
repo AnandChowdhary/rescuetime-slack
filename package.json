@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Post your RescueTime daily productivity pulse and hours logged to Slack",
   "scripts": {
-    "run": "npx ts-node index.ts"
+    "run": "ts-node index.ts"
   },
   "repository": {
     "type": "git",
@@ -23,13 +23,13 @@
     "axios": "^0.19.2",
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.0",
-    "ky": "^0.20.0"
+    "ky": "^0.20.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/fs-extra": "^9.0.1",
-    "@types/js-yaml": "^3.12.5",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.5"
+    "@types/js-yaml": "^3.12.5"
   }
 }
