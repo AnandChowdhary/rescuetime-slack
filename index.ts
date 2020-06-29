@@ -106,7 +106,7 @@ export const rescuetimeSlack = async () => {
       config.botIcon,
       config.webhook,
       user,
-      summaries[1]
+      summaries[0]
     );
     console.log(`Posted ${user}'s summary to Slack`);
   }
