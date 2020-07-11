@@ -4,6 +4,8 @@ on:
     - cron: "0 5 * * *"
   repository_dispatch:
     types: [update]
+  push:
+    branches: [master]
 jobs:
   release:
     name: Update
@@ -22,5 +24,6 @@ jobs:
         run: npm run run
         env:
           API_KEY_ANAND_CHOWDHARY: ${{ secrets.API_KEY_ANAND_CHOWDHARY }}
+          API_KEY_CARLO_BADINI: ${{ secrets.API_KEY_CARLO_BADINI }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           WEBHOOK: ${{ secrets.WEBHOOK }}
