@@ -2,6 +2,8 @@ import { join } from "path";
 import { readFile } from "fs-extra";
 import axios from "axios";
 import { load } from "js-yaml";
+import { config } from "dotenv";
+config();
 
 export interface RescueTimeDailySummary {
   id: number;
@@ -24,6 +26,11 @@ export interface RescueTimeDailySummary {
   all_distracting_duration_formatted: string;
 }
 
+export interface RescueTimeWeeklySummary {
+  row_headers: [string, string, string, string, string, string];
+  rows: Array<[number, number, number, string, string, number]>;
+}
+
 /** Fetch RescueTime daily summary for user */
 export const fetchDailySummary = async (
   apiKey: string
@@ -38,16 +45,16 @@ export const fetchDailySummary = async (
 /** Fetch RescueTime daily summary for user */
 export const fetchWeeklySummary = async (
   apiKey: string
-): Promise<RescueTimeDailySummary[]> => {
+): Promise<RescueTimeWeeklySummary> => {
   return (
     await axios.get(
-      `https://www.rescuetime.com/anapi/data?key=${apiKey}&format=json&resolution_time=week`
+      `https://www.rescuetime.com/anapi/data?key=${apiKey}&format=json&restrict_begin=2020-07-20&restrict_end=2020-07-27`
     )
   ).data;
 };
 
 /** Post a message to a Slack channel */
-export const postToSlack = async (
+export const postToSlackDaily = async (
   username: string,
   icon_url: string,
   url: string,
@@ -89,6 +96,37 @@ export const postToSlack = async (
   await axios.post(url, payload);
 };
 
+/** Post a message to a Slack channel */
+export const postToSlackWeekly = async (
+  username: string,
+  icon_url: string,
+  url: string,
+  user: string,
+  data: RescueTimeWeeklySummary
+) => {
+  const payload = {
+    username,
+    icon_url,
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*RescueTime* weekly summary for *${user}*`,
+        },
+      },
+      {
+        type: "section",
+        fields: data.rows.slice(0, 6).map((item) => ({
+          type: "mrkdwn",
+          text: `*${item[3]}* \n ${item[4]}`,
+        })),
+      },
+    ],
+  };
+  await axios.post(url, payload);
+};
+
 /** Run the RescueTime Slack script */
 export const rescuetimeSlack = async () => {
   console.log("Started");
@@ -106,20 +144,23 @@ export const rescuetimeSlack = async () => {
   for await (const user of Object.keys(config.apiKeys)) {
     if (process.argv[2] === "weekly") {
       console.log("Weekly trigger");
-      try {
-        const summaries = await fetchWeeklySummary(
-          config.apiKeys[user].replace(
-            "$API_KEY",
-            process.env[
-              `API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`
-            ] ?? ""
-          )
-        );
-      } catch (error) {
-        console.log(error.response.data);
-      }
-      // if (!summaries.length) continue;
-      // console.log(summaries);
+      const summaries = await fetchWeeklySummary(
+        config.apiKeys[user].replace(
+          "$API_KEY",
+          process.env[
+            `API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`
+          ] ?? ""
+        )
+      );
+      if (!summaries.rows.length) continue;
+      await postToSlackWeekly(
+        config.botName,
+        config.botIcon,
+        config.webhook,
+        user,
+        summaries
+      );
+      console.log(`Posted ${user}'s summary to Slack`);
     } else {
       const summaries = await fetchDailySummary(
         config.apiKeys[user].replace(
@@ -130,7 +171,7 @@ export const rescuetimeSlack = async () => {
         )
       );
       if (!summaries.length) continue;
-      await postToSlack(
+      await postToSlackDaily(
         config.botName,
         config.botIcon,
         config.webhook,
