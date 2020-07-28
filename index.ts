@@ -35,6 +35,17 @@ export const fetchDailySummary = async (
   ).data;
 };
 
+/** Fetch RescueTime daily summary for user */
+export const fetchWeeklySummary = async (
+  apiKey: string
+): Promise<RescueTimeDailySummary[]> => {
+  return (
+    await axios.get(
+      `https://www.rescuetime.com/anapi/data?key=${apiKey}&format=json&resolution_time=week`
+    )
+  ).data;
+};
+
 /** Post a message to a Slack channel */
 export const postToSlack = async (
   username: string,
@@ -95,6 +106,20 @@ export const rescuetimeSlack = async () => {
   for await (const user of Object.keys(config.apiKeys)) {
     if (process.argv[2] === "weekly") {
       console.log("Weekly trigger");
+      try {
+        const summaries = await fetchWeeklySummary(
+          config.apiKeys[user].replace(
+            "$API_KEY",
+            process.env[
+              `API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`
+            ] ?? ""
+          )
+        );
+      } catch (error) {
+        console.log(error.response.data);
+      }
+      // if (!summaries.length) continue;
+      // console.log(summaries);
     } else {
       const summaries = await fetchDailySummary(
         config.apiKeys[user].replace(

@@ -3,4 +3,4 @@ botName: Koj Bot
 botIcon: https://raw.githubusercontent.com/AnandChowdhary/rescuetime-slack/master/assets/bot.png
 apiKeys:
   "Anand Chowdhary": "$API_KEY"
-  "Carlo Badini": "$API_KEY"
+  # "Carlo Badini": "$API_KEY"
