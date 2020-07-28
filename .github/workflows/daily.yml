@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Post RescueTime statistics to Slack
-        run: npm run run
+        run: npm run run-daily
         env:
           API_KEY_ANAND_CHOWDHARY: ${{ secrets.API_KEY_ANAND_CHOWDHARY }}
           API_KEY_CARLO_BADINI: ${{ secrets.API_KEY_CARLO_BADINI }}
