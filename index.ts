@@ -48,7 +48,11 @@ export const fetchWeeklySummary = async (
 ): Promise<RescueTimeWeeklySummary> => {
   return (
     await axios.get(
-      `https://www.rescuetime.com/anapi/data?key=${apiKey}&format=json&restrict_begin=2020-07-20&restrict_end=2020-07-27`
+      `https://www.rescuetime.com/anapi/data?key=${apiKey}&format=json&restrict_begin=${new Date(
+        new Date().setDate(new Date().getDate() - 7)
+      )
+        .toISOString()
+        .slice(0, 10)}&restrict_end=${new Date().toISOString().slice(0, 10)}`
     )
   ).data;
 };
