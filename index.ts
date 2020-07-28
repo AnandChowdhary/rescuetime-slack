@@ -93,22 +93,27 @@ export const rescuetimeSlack = async () => {
     process.env.WEBHOOK ?? ""
   );
   for await (const user of Object.keys(config.apiKeys)) {
-    const summaries = await fetchDailySummary(
-      config.apiKeys[user].replace(
-        "$API_KEY",
-        process.env[`API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`] ??
-          ""
-      )
-    );
-    if (!summaries.length) continue;
-    await postToSlack(
-      config.botName,
-      config.botIcon,
-      config.webhook,
-      user,
-      summaries[0]
-    );
-    console.log(`Posted ${user}'s summary to Slack`);
+    if (process.argv[2] === "weekly") {
+      console.log("Weekly trigger");
+    } else {
+      const summaries = await fetchDailySummary(
+        config.apiKeys[user].replace(
+          "$API_KEY",
+          process.env[
+            `API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`
+          ] ?? ""
+        )
+      );
+      if (!summaries.length) continue;
+      await postToSlack(
+        config.botName,
+        config.botIcon,
+        config.webhook,
+        user,
+        summaries[0]
+      );
+      console.log(`Posted ${user}'s summary to Slack`);
+    }
   }
   console.log("Success");
 };
