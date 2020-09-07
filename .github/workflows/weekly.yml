@@ -23,7 +23,7 @@ jobs:
       - name: Post RescueTime statistics to Slack
         run: npm run run-weekly
         env:
-          API_KEY_ANAND_CHOWDHARY: ${{ secrets.API_KEY_ANAND_CHOWDHARY }}
-          API_KEY_CARLO_BADINI: ${{ secrets.API_KEY_CARLO_BADINI }}
+          API_KEY_U013KLNLY86: ${{ secrets.API_KEY_U013KLNLY86 }}
+          API_KEY_UPCE2RE3A: ${{ secrets.API_KEY_UPCE2RE3A }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           WEBHOOK: ${{ secrets.WEBHOOK }}
