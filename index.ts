@@ -73,7 +73,7 @@ export const postToSlackDaily = async (
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*RescueTime* summary for *${user}* for ${new Date(
+          text: `⏰ RescueTime *daily summary* for <@${user}> on ${new Date(
             data.date
           ).toLocaleDateString("en-US", {
             weekday: "long",
@@ -116,7 +116,7 @@ export const postToSlackWeekly = async (
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*RescueTime* weekly summary for *${user}*`,
+          text: `⏰🗓 RescueTime *weekly summary* for <@${user}> the past week`,
         },
       },
       {
