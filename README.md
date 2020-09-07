@@ -18,10 +18,10 @@ The code in [`mod.ts`](./mod.ts) fetches your RescueTime daily statistics and po
 ```yml
 webhook: https://hooks.slack.com/services/$WEBHOOK
 apiKeys:
-  "Anand Chowdhary": "$API_KEY"
+  "U013KLNLY86": "$API_KEY"
 ```
 
-More people can be added under the `apiKeys` key in the YAML file. For each user, `$API_KEY` is replaced by the API key for their name, stored in GitHub Secrets; for example "Anand Chowdhary" transforms to `API_KEY_ANAND_CHOWDHARY`. The `$WEBHOOK` environment variable has the Slack webhook.
+More people can be added under the `apiKeys` key in the YAML file by adding their Slack user IDs. For each user, `$API_KEY` is replaced by the API key for their name, stored in GitHub Secrets; for example "U013KLNLY86" transforms to `API_KEY_U013KLNLY86` (the name of the environment variable). The `$WEBHOOK` environment variable has the Slack webhook.
 
 Fork this project and update the YAML configuration and GitHub Secrets to get your own bot. You can also customize the bot name and icon in the configuration file (`botName` and `botIcon` respectively).
 
