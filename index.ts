@@ -87,11 +87,11 @@ export const postToSlackDaily = async (
         fields: [
           {
             type: "mrkdwn",
-            text: `*${data.productivity_pulse}/100* \n Productivity Pulse`,
+            text: `*${Math.floor(data.total_hours * data.productivity_pulse)}/2400* \n RescueScore™`,
           },
           {
             type: "mrkdwn",
-            text: `*${data.total_duration_formatted}* \n Total Duration`,
+            text: `*${data.total_duration_formatted}*, ${data.productivity_pulse} \n Pulse, Duration`,
           },
         ],
       },
