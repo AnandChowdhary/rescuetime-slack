@@ -9,6 +9,7 @@ export interface RescueTimeDailySummary {
   id: number;
   date: string;
   productivity_pulse: number;
+  total_hours: number;
   very_productive_percentage: number;
   productive_percentage: number;
   neutral_percentage: number;
