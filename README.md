@@ -9,11 +9,11 @@ Post your RescueTime daily productivity pulse and hours logged to Slack.
 [![TypeScript](https://img.shields.io/badge/types-TypeScript-blue)](https://github.com/AnandChowdhary/rescuetime-slack)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-![Screenshot of bot message](./assets/screenshot.png)
+![Screenshot of bot message](./assets/screenshot-2.png)
 
 ## ⭐ Getting started
 
-The code in [`mod.ts`](./mod.ts) fetches your RescueTime daily statistics and posts it on Slack using a webhook configured in [`rescuetime-slack.yml`](./rescuetime-slack.yml):
+The code in [`index.ts`](./index.ts) fetches your RescueTime daily statistics and posts it on Slack using a webhook configured in [`rescuetime-slack.yml`](./rescuetime-slack.yml):
 
 ```yml
 webhook: https://hooks.slack.com/services/$WEBHOOK
@@ -23,7 +23,9 @@ apiKeys:
 
 More people can be added under the `apiKeys` key in the YAML file by adding their Slack user IDs. For each user, `$API_KEY` is replaced by the API key for their name, stored in GitHub Secrets; for example "U013KLNLY86" transforms to `API_KEY_U013KLNLY86` (the name of the environment variable). The `$WEBHOOK` environment variable has the Slack webhook.
 
-Fork this project and update the YAML configuration and GitHub Secrets to get your own bot. You can also customize the bot name and icon in the configuration file (`botName` and `botIcon` respectively).
+To get started, fork this project and update the YAML configuration and GitHub Secrets to get your own bot. You can also customize the bot name and icon in the configuration file (`botName` and `botIcon` respectively).
+
+The bot also adds a "RescueScore" which is the productivity score * number of minutes, and gives a great overview of the total productivity.
 
 ## 👩‍💻 Automation
 
