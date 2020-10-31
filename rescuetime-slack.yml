@@ -1,6 +1,6 @@
 webhook: https://hooks.slack.com/services/$WEBHOOK
-botName: Koj Bot
-botIcon: https://raw.githubusercontent.com/AnandChowdhary/rescuetime-slack/master/assets/bot.png
+botName: RescueTime
+botIcon: https://avatars1.githubusercontent.com/u/9471675?s=200&v=4
 apiKeys:
   "U013KLNLY86": "$API_KEY"
   "UPCE2RE3A": "$API_KEY"
