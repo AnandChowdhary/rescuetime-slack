@@ -4,8 +4,6 @@ on:
     - cron: "5 4 * * 1"
   repository_dispatch:
     types: [update]
-  push:
-    branches: [master]
 jobs:
   release:
     name: Update
