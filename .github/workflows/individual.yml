@@ -1,4 +1,4 @@
-name: RescueTime Slack Individual
+name: Individual
 on:
   repository_dispatch:
     types: [individual]

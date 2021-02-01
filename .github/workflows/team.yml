@@ -1,4 +1,4 @@
-name: RescueTime Slack Team
+name: Team
 on:
   schedule:
     - cron: "0 5 * * *"

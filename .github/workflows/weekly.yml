@@ -1,4 +1,4 @@
-name: RescueTime Slack Weekly
+name: Weekly Individual
 on:
   repository_dispatch:
     types: [weekly]
