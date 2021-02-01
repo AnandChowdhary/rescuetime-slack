@@ -1,0 +1,27 @@
+name: RescueTime Slack
+on:
+  schedule:
+    - cron: "0 5 * * *"
+  repository_dispatch:
+    types: [team]
+jobs:
+  release:
+    name: Update
+    runs-on: ubuntu-18.04
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install dependencies
+        run: npm ci
+      - name: Post RescueTime statistics to Slack
+        run: npm run run-team
+        env:
+          API_KEY_U013KLNLY86: ${{ secrets.API_KEY_U013KLNLY86 }}
+          API_KEY_UPCE2RE3A: ${{ secrets.API_KEY_UPCE2RE3A }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          WEBHOOK: ${{ secrets.WEBHOOK }}
