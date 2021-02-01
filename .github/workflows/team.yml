@@ -4,6 +4,8 @@ on:
     - cron: "0 5 * * *"
   repository_dispatch:
     types: [team]
+  workflow_dispatch:
+    types: [team]
 jobs:
   release:
     name: Update

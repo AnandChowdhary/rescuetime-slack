@@ -2,6 +2,8 @@ name: RescueTime Slack Weekly
 on:
   repository_dispatch:
     types: [weekly]
+  workflow_dispatch:
+    types: [weekly]
 jobs:
   release:
     name: Update
