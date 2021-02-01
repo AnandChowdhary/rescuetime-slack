@@ -88,7 +88,9 @@ export const postToSlackDaily = async (
         fields: [
           {
             type: "mrkdwn",
-            text: `*${Math.floor(data.total_hours * data.productivity_pulse)}/2400* \n RescueScore™`,
+            text: `*${Math.floor(
+              data.total_hours * data.productivity_pulse
+            )}/2400* \n RescueScore™`,
           },
           {
             type: "mrkdwn",
@@ -146,6 +148,8 @@ export const rescuetimeSlack = async () => {
     "$WEBHOOK",
     process.env.WEBHOOK ?? ""
   );
+  let totalHours = 0;
+  let totalScore = 0;
   for await (const user of Object.keys(config.apiKeys)) {
     if (process.argv[2] === "weekly") {
       console.log("Weekly trigger");
@@ -166,7 +170,7 @@ export const rescuetimeSlack = async () => {
         summaries
       );
       console.log(`Posted ${user}'s summary to Slack`);
-    } else {
+    } else if (process.argv[2] === "individual") {
       const summaries = await fetchDailySummary(
         config.apiKeys[user].replace(
           "$API_KEY",
@@ -176,6 +180,10 @@ export const rescuetimeSlack = async () => {
         )
       );
       if (!summaries.length) continue;
+      totalHours += summaries[0].total_hours;
+      totalScore += Math.floor(
+        summaries[0].total_hours * summaries[0].productivity_pulse
+      );
       await postToSlackDaily(
         config.botName,
         config.botIcon,
@@ -185,6 +193,36 @@ export const rescuetimeSlack = async () => {
       );
       console.log(`Posted ${user}'s summary to Slack`);
     }
+  }
+  if (process.argv[2] !== "individual" && process.argv[2] !== "weekly") {
+    await axios.post(config.webhook, {
+      username: config.botName,
+      icon_url: config.botIcon,
+      blocks: [
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `⏰ RescueTime *daily summary* for the team yesterday`,
+          },
+        },
+        {
+          type: "section",
+          fields: [
+            {
+              type: "mrkdwn",
+              text: `*${totalScore}* \n RescueScore™`,
+            },
+            {
+              type: "mrkdwn",
+              text: `*${Math.floor(totalHours)} hours ${Math.round(
+                (totalHours - Math.floor(totalHours)) * 60
+              )} minutes* \n Duration`,
+            },
+          ],
+        },
+      ],
+    });
   }
   console.log("Success");
 };
