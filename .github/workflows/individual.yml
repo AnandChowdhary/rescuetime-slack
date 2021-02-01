@@ -1,7 +1,5 @@
 name: RescueTime Slack
 on:
-  schedule:
-    - cron: "0 5 * * *"
   repository_dispatch:
     types: [update]
 jobs:
