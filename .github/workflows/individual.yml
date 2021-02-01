@@ -1,7 +1,7 @@
-name: RescueTime Slack
+name: RescueTime Slack Individual
 on:
   repository_dispatch:
-    types: [update]
+    types: [individual]
 jobs:
   release:
     name: Update

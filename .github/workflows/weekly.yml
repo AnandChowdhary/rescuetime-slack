@@ -1,7 +1,7 @@
-name: RescueTime Slack
+name: RescueTime Slack Weekly
 on:
   repository_dispatch:
-    types: [update]
+    types: [weekly]
 jobs:
   release:
     name: Update
