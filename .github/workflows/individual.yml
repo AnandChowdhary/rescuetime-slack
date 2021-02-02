@@ -3,7 +3,6 @@ on:
   repository_dispatch:
     types: [individual]
   workflow_dispatch:
-    types: [individual]
 jobs:
   release:
     name: Update

@@ -5,7 +5,6 @@ on:
   repository_dispatch:
     types: [team]
   workflow_dispatch:
-    types: [team]
 jobs:
   release:
     name: Update
