@@ -150,6 +150,7 @@ export const rescuetimeSlack = async () => {
   );
   let totalHours = 0;
   let totalScore = 0;
+  let productivityPulse = 0;
   for await (const user of Object.keys(config.apiKeys)) {
     if (process.argv[2] === "weekly") {
       console.log("Weekly trigger");
@@ -180,10 +181,6 @@ export const rescuetimeSlack = async () => {
         )
       );
       if (!summaries.length) continue;
-      totalHours += summaries[0].total_hours;
-      totalScore += Math.floor(
-        summaries[0].total_hours * summaries[0].productivity_pulse
-      );
       await postToSlackDaily(
         config.botName,
         config.botIcon,
@@ -206,6 +203,8 @@ export const rescuetimeSlack = async () => {
       totalScore += Math.floor(
         summaries[0].total_hours * summaries[0].productivity_pulse
       );
+      productivityPulse +=
+        summaries[0].total_hours * summaries[0].productivity_pulse;
     }
   }
   if (process.argv[2] !== "individual" && process.argv[2] !== "weekly") {
@@ -225,13 +224,17 @@ export const rescuetimeSlack = async () => {
           fields: [
             {
               type: "mrkdwn",
-              text: `*${totalScore}* \n RescueScore™`,
+              text: `*${Number(totalScore).toLocaleString()}* \n RescueScore™`,
             },
             {
               type: "mrkdwn",
-              text: `*${Math.floor(totalHours)} hours ${Math.round(
+              text: `*${Math.floor(
+                totalHours
+              ).toLocaleString()} hours ${Math.round(
                 (totalHours - Math.floor(totalHours)) * 60
-              )} minutes* \n Duration`,
+              ).toLocaleString()} minutes (${Math.floor(
+                productivityPulse / totalHours
+              ).toLocaleString()})* \n Duration (productivity)`,
             },
           ],
         },
