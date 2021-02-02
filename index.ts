@@ -192,6 +192,20 @@ export const rescuetimeSlack = async () => {
         summaries[0]
       );
       console.log(`Posted ${user}'s summary to Slack`);
+    } else {
+      const summaries = await fetchDailySummary(
+        config.apiKeys[user].replace(
+          "$API_KEY",
+          process.env[
+            `API_KEY_${user.toLocaleUpperCase().replace(/ /g, "_")}`
+          ] ?? ""
+        )
+      );
+      if (!summaries.length) continue;
+      totalHours += summaries[0].total_hours;
+      totalScore += Math.floor(
+        summaries[0].total_hours * summaries[0].productivity_pulse
+      );
     }
   }
   if (process.argv[2] !== "individual" && process.argv[2] !== "weekly") {
