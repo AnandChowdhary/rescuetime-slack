@@ -1,5 +1,5 @@
 import { join } from "path";
-import { readFile } from "fs-extra";
+import { readFile, readJson } from "fs-extra";
 import axios from "axios";
 import { load } from "js-yaml";
 import { config } from "dotenv";
@@ -240,6 +240,22 @@ export const rescuetimeSlack = async () => {
         },
       ],
     });
+    const topScore = await readJson(join(".", "top-score.json"));
+    if (totalScore > Number(topScore)) {
+      await axios.post(config.webhook, {
+        username: config.botName,
+        icon_url: config.botIcon,
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "🎉 *THIS IS OUR TOP SCORE EVER!!!*",
+            },
+          },
+        ],
+      });
+    }
   }
   console.log("Success");
 };
